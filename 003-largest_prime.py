@@ -2,6 +2,7 @@
 
 import math
 import numpy as np
+from eratosthenes import *
 
 def sieve(N):
     """Perform Eratosthenes sieve to find prime factors of N."""
@@ -20,7 +21,7 @@ def sieve(N):
 
 
 N = 600851475143
-factors = sieve(N)
+factors = eratosthenes(N)
 
 print(factors)
 
