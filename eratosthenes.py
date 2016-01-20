@@ -1,32 +1,55 @@
 import numpy as np
 import math
 
+
 def eratosthenes(N):
-    """Find all prime numbers up to and including N"""
+    """Find all prime numbers <= N.
+
+    >>> eratosthenes(1)
+    Traceback (most recent call last):
+        ...
+        assert N >= 2
+    AssertionError
+
+    >>> eratosthenes(2)
+    array([2])
+
+    >>> eratosthenes(3)
+    array([2, 3])
+
+    >>> eratosthenes(4)
+    array([2, 3])
+
+    >>> eratosthenes(5)
+    array([2, 3, 5])
+
+    >>> eratosthenes(16)
+    array([ 2,  3,  5,  7, 11, 13])
+
+    >>> eratosthenes(20)
+    array([ 2,  3,  5,  7, 11, 13, 17, 19])
+
+    >>> eratosthenes(23)
+    array([ 2,  3,  5,  7, 11, 13, 17, 19, 23])
+    """
 
     assert N >= 2
-    primes = np.ones(N+1)
+    primes = np.arange(3, N+1, 2)
 
-    last_prime_to_sieve = int(math.sqrt(N))
-
-    # Kill the initial 0 and 1
-    primes[0:2] = 0
+    sievestop = int(math.sqrt(N))
+    if sievestop % 2 == 0:
+        sievestop -= 1
 
     if N > 3:
-       
-        # Kill all multiples of 2
-        np.put(primes, np.arange(4, N+1, 2), 0)
-
-        for i in np.arange(3, last_prime_to_sieve+1):
+        for i in np.arange(3, sievestop+1, 2):
             n = i
-            while n <= N-i:
-                n += i
-                primes[n] = 0
+            while n <= N-2*i:
+                n += 2*i
+                primes[int(n/2)-1] = 0
 
+    return np.concatenate(([2], primes[primes != 0]))
 
-    return np.where(primes == 1)[0]
-
-
-gg = eratosthenes(147)
-print(gg)
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
 
