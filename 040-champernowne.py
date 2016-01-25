@@ -32,6 +32,7 @@ for d in range(1, 7):
     last_endd = endd
     print("{}\t\t\t{}\t\t\t{}\t\t\t{}".format(d, startd, lend, endd))
 
+
 def num2loc(N):
     """Returns the location (1-based) in the Champernownes' constant of the first (leftmost) digit of given number"""
     dec = m.ceil(m.log10(N+1))
@@ -41,11 +42,12 @@ def num2loc(N):
             prevdec_id += (x+1)*10**x
     print(prevdec_id)
     dec_start = 9*prevdec_id + 1
-    num_loc = (N - 10**(dec-1)) * dec + dec_start  
+    num_loc = (N - 10**(dec-1)) * dec + dec_start
     return num_loc
 
 for i in (5, 10, 13, 100, 1000, 999, 1001):
     print("Location of {} in Champernowne's constant: {}".format(i, num2loc(i)))
+
 
 def loc2num_dig(loc):
     """Returns the number and its digit where a given location (1-based) points in the Champernowne's constant"""
@@ -69,10 +71,26 @@ def loc2num_dig(loc):
     if ldb > loc:
         dec -= 1
 
-    return dec
+    base_loc = num2loc(10**(dec-1))
+    # Note: the decade also coincides with the number of digits in the decade's numbers
+    num = m.floor((loc - base_loc)/dec + 10**(dec-1))
+    dig = str(num)[(loc-base_loc) % dec]
+    return (num, dig)
 
-for i in (5, 16,  230, 2889, 40000,  350000, 38889, 38890, 488889, 488890 ):
-    print("Location {} is in decade {}".format(i, loc2num_dig(i)))
-     
 
+#for i in (5, 16,  230, 2889, 40000,  350000, 38889, 38890, 488889, 488890):
+#    print("Location {} is in decade {}".format(i, loc2num_dig(i)))
+
+for i in (5, 16, 17, 18, 1000):
+    num, dig = loc2num_dig(i)
+    print("Location {} contains the digit {} which belongs to number {}".format(i, dig, num))
+
+
+ans = 1
+for d in (1, 10, 100, 1000, 10000, 100000, 1000000):
+    digit = loc2num_dig(d)[1]
+    print("Digit #{}: {}".format(d, digit))
+    ans *= int(digit)
+
+print(ans)
 
